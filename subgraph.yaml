@@ -1,0 +1,47 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: WETH
+    network: mainnet
+    source:
+      address: "0xc99a6a985ed2cac1ef41640596c5a5f9f4e19ef5"
+      abi: WETH
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - AdminRemoved
+        - Approval
+        - MinterAdded
+        - MinterRemoved
+        - SpenderUnwhitelisted
+        - SpenderWhitelisted
+        - Transfer
+      abis:
+        - name: WETH
+          file: ./abis/WETH.json
+      eventHandlers:
+        - event: AdminChanged(indexed address,indexed address)
+          handler: handleAdminChanged
+        - event: AdminRemoved(indexed address)
+          handler: handleAdminRemoved
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: MinterAdded(indexed address)
+          handler: handleMinterAdded
+        - event: MinterRemoved(indexed address)
+          handler: handleMinterRemoved
+        - event: SpenderUnwhitelisted(indexed address)
+          handler: handleSpenderUnwhitelisted
+        - event: SpenderWhitelisted(indexed address)
+          handler: handleSpenderWhitelisted
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/weth.ts
