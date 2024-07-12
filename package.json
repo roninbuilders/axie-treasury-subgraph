@@ -1,13 +1,12 @@
 {
-  "name": "axie-treasury-subgrpah",
-  "license": "UNLICENSED",
+  "name": "axie-treasury-subgraph",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ roninbuilders/axie-treasury-subgrpah",
-    "create-local": "graph create --node http://localhost:8020/ roninbuilders/axie-treasury-subgrpah",
-    "remove-local": "graph remove --node http://localhost:8020/ roninbuilders/axie-treasury-subgrpah",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 roninbuilders/axie-treasury-subgrpah",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ axie-treasury-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ axie-treasury-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ axie-treasury-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 axie-treasury-subgraph",
     "test": "graph test"
   },
   "dependencies": {
