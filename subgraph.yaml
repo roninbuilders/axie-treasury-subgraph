@@ -1,26 +1,54 @@
-specVersion: 1.0.0
+specVersion: 1.1.0
 indexerHints:
   prune: auto
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: WETH
+    name: Treasury
     network: mainnet
     source:
-      address: "0xc99a6a985ed2cac1ef41640596c5a5f9f4e19ef5"
+      address: "0x245db945c485b68fdc429e4f7085a1761aa4d45d"
       abi: WETH
-      startBlock: 16377111
+      startBlock: 36349826
+      # startBlock: 16377111
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Transfer
+        - TreasuryTransfer
+        # - TreasurySnapshot
+        # - TreasuryTransferDay
+        # - TreasuryTransferWeek
+        - Block
+        - BlockTime
       abis:
         - name: WETH
           file: ./abis/WETH.json
+        - name: AXS
+          file: ./abis/AXS.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      file: ./src/weth.ts
+      # Get treasury balances per block
+      blockHandlers:
+        - handler: handleBlock
+      file: ./src/mappings.ts
+    #   address: "0xc99a6a985ed2cac1ef41640596c5a5f9f4e19ef5"
+    #   abi: WETH
+    #   startBlock: 36349876
+    #   # startBlock: 16377111
+    # mapping:
+    #   kind: ethereum/events
+    #   apiVersion: 0.0.7
+    #   language: wasm/assemblyscript
+    #   entities:
+    #     - Transfer
+    #   abis:
+    #     - name: WETH
+    #       file: ./abis/WETH.json
+    #   eventHandlers:
+    #     - event: Transfer(indexed address,indexed address,uint256)
+    #       handler: handleTransfer
+    #   file: ./src/weth.ts

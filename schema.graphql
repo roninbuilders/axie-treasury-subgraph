@@ -1,10 +1,48 @@
-type Transfer @entity(immutable: true) {
-  id: Bytes!
+type TreasuryTransfer @entity(timeseries: true) {
+  id: Int8!
   _from: Bytes! # address
   _to: Bytes! # address
-  _value: BigInt! # uint256
-  _token: Bytes! # token address
+  amountInflowETH: BigDecimal! 
+  amountOutflowETH: BigDecimal! 
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  timestamp: Timestamp!
+  tokenAddress: String!
+  source: String! # Source of the transfer (e.g., "Breed", "Marketplace", etc.)
+  treasury: Block!
+}
+
+type Block @entity(timeseries: true) {
+  # The id; it is the id of one of the data points that were aggregated into
+  # this bucket, but which one is undefined and should not be relied on
+  id: Int8!
+  # The timestamp of the bucket is always the timestamp of the beginning of
+  # the interval
+  timestamp: Timestamp!
+  amountETH: BigInt!
+  # amountAXS: BigInt!
+  transfers: [TreasuryTransfer!]! @derivedFrom(field: "treasury") # Derived relationship
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  # amountInflowETH: BigDecimal!
+  # amountOutflowETH: BigDecimal!
+}
+
+# Aggregations for daily intervals
+type TreasuryTransferDay @aggregation(intervals: ["day"], source: "TreasuryTransfer") {
+  id: Int8!
+  timestamp: Timestamp!
+  count: Int! @aggregate(fn: "count")
+  totalInflowETH: BigDecimal! @aggregate(fn: "sum", arg: "amountInflowETH")
+  totalOutflowETH: BigDecimal! @aggregate(fn: "sum", arg: "amountOutflowETH")
+}
+
+# Aggregations for daily intervals
+type TreasuryBlockDay @aggregation(intervals: ["day"], source: "Block") {
+  id: Int8!
+  timestamp: Timestamp!
+  blocksCount: Int! @aggregate(fn: "count")
+  # amountETH: BigInt! @aggregate(fn: "sum", arg: "amountETH")
+  # transfers: [TreasuryTransferDay!]! @derivedFrom(field: "transfers") # Derived relationship
 }
